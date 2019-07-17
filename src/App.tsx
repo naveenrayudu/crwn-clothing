@@ -4,6 +4,7 @@ import HomePage from "./pages/homepage/homepage.component";
 
 import "./App.css";
 import ShopPage from "./pages/shoppage/shoppage.component";
+import Header from "./components/header/header.component";
 
 
 const NotFoundPage: React.FC = () => {
@@ -22,9 +23,8 @@ const NotFoundPage: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <div style={{
-      padding: '20px 60px'
-    }}>
+    <div className="app-container">
+      <Header></Header>
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/shop" component={ShopPage} />

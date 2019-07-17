@@ -1,10 +1,8 @@
 import React from 'react';
 import MenuItem from '../menu-item/menu-item.component';
 import './directory.styles.scss';
+import IDefaultComponentProps from '../../models/interfaces/IDefaultComponentProps';
 
-interface IDirectoryProps {
-
-}
 
 interface IDirectoryState {
     sections: {
@@ -16,8 +14,8 @@ interface IDirectoryState {
     }[]
 }
 
-class Directory extends React.Component<IDirectoryProps, IDirectoryState> {
-    constructor(props: IDirectoryProps) {
+class Directory extends React.Component<IDefaultComponentProps, IDirectoryState> {
+    constructor(props: IDefaultComponentProps) {
         super(props);
 
         this.state = {

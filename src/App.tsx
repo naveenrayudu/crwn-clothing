@@ -3,14 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import HomePage from "./pages/homepage/homepage.component";
 
 import "./App.css";
-
-const HatsPage: React.FC = () => {
-  return (
-    <div>
-      <h1>Hats Page</h1>
-    </div>
-  );
-};
+import ShopPage from "./pages/shoppage/shoppage.component";
 
 
 const NotFoundPage: React.FC = () => {
@@ -29,10 +22,12 @@ const NotFoundPage: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <div>
+    <div style={{
+      padding: '20px 60px'
+    }}>
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route exact path="/hats" component={HatsPage} />
+        <Route path="/shop" component={ShopPage} />
         <Route component={NotFoundPage} />
       </Switch>
     </div>

@@ -62,8 +62,8 @@ class Directory extends React.Component<IDirectoryProps, IDirectoryState> {
         return (
             <div className="directory-menu">
                 {
-                    this.state.sections.map(section => {
-                        return <MenuItem key={section.id} title={section.title} imageUrl={section.imageUrl} size={section.size}></MenuItem>
+                    this.state.sections.map(({id, ...otherSectionProps}) => {
+                        return <MenuItem key={id} {...otherSectionProps}></MenuItem>
                     })
                 }
             </div>

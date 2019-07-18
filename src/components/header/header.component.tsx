@@ -3,8 +3,30 @@ import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 
 import "./header.styles.scss";
+import { ISignedInUserInfo } from "../../models/interfaces/IUserAccount";
 
-const Header: React.FunctionComponent = () => {
+interface IUserHeaderProps {
+  currentUser?: ISignedInUserInfo;
+  onSignOut?: any
+}
+
+const Header: React.FunctionComponent<IUserHeaderProps> = ({ currentUser, onSignOut }) => {
+  const renderUserLinks = () => {
+    if (currentUser && currentUser.email) {
+      return (
+        <Link className="option" to="/" onClick={onSignOut}>
+          SIGN OUT
+        </Link>
+      );
+    }
+
+    return (
+      <Link className="option" to="/signin">
+        SIGN IN
+      </Link>
+    );
+  };
+
   return (
     <div className="header">
       <Link to="/" className="logo-container">
@@ -17,6 +39,8 @@ const Header: React.FunctionComponent = () => {
         <Link className="option" to="/shop">
           CONTACT
         </Link>
+
+        {renderUserLinks()}
       </div>
     </div>
   );

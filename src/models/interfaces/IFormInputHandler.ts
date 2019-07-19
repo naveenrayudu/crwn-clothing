@@ -7,13 +7,25 @@ export interface IInputHandler {
     type: string,
     value: string,
     name: string,
-    isValid: false,
-    isTouched: false
+    isValid: boolean,
+    isTouched: boolean,
+    errorMessage: string
+}
+
+export interface IValidationTypes {
+    required?: {
+        errorMessage: string
+    },
+    dependentProperty?: {
+        value: string,
+        errorMessage: string
+    },
+    typeProperty?: {
+        type: "email",
+        errorMessage: string
+    }
 }
 
 export interface IFormInputHandler extends IInputHandler {
-    validation: {
-        required: boolean,
-        errorMessage: string
-    }
+    validation: IValidationTypes
 }

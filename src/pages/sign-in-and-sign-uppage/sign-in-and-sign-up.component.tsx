@@ -3,6 +3,7 @@ import React from "react";
 import "./sign-in-and-sign-up.styles.scss";
 import SignIn from "../../components/user-login/sign-in/sign-in.component";
 import { ISignedInUserInfo } from "../../models/interfaces/IUserAccount";
+import SignUp from "../../components/user-login/sign-up/sign-up.component";
 
 type ISignInSignUpProps = {
   history: any;
@@ -11,7 +12,6 @@ type ISignInSignUpProps = {
 
 class SignInAndSignUp extends React.Component<ISignInSignUpProps> {
   componentDidMount() {
-    debugger;
     if (this.props.currentUser && this.props.currentUser.email)
       this.props.history.push("/");
   }
@@ -25,6 +25,7 @@ class SignInAndSignUp extends React.Component<ISignInSignUpProps> {
     return (
       <div className="sign-up-and-sign-in">
         <SignIn />
+        <SignUp />
       </div>
     );
   }

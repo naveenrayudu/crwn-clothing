@@ -6,6 +6,7 @@ import "./form-input.styles.scss";
 interface IFormInputChangeHandler extends IInputHandler {
   errorMessage: string;
   onChangeHandler: any;
+  onBlur?: any;
 }
 
 const FormInput: React.FC<IFormInputChangeHandler> = ({
@@ -18,7 +19,8 @@ const FormInput: React.FC<IFormInputChangeHandler> = ({
   isValid,
   errorMessage,
   placeholder,
-  onChangeHandler
+  onChangeHandler,
+  onBlur
 }) => {
   return (
     <div className="group">
@@ -29,12 +31,13 @@ const FormInput: React.FC<IFormInputChangeHandler> = ({
         type={type}
         value={value}
         onChange={onChangeHandler}
+        onBlur={onBlur}
       />
       <label className={`${value.length !== 0 ? 'shrink' : ''} form-input-label`} htmlFor="id">
         {labelName}
       </label>
 
-      {isTouched && isValid && errorMessage ? <div>{errorMessage}</div> : null}
+      {isTouched && !isValid && errorMessage ? <div className="error">{errorMessage}</div> : null}
     </div>
   );
 };

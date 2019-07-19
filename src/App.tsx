@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import HomePage from "./pages/homepage/homepage.component";
-import { auth } from "./firebase/firebase.util";
+import { auth, createOrSetUpUserBySignIn } from "./firebase/firebase.util";
 
 import "./App.css";
 import ShopPage from "./pages/shoppage/shoppage.component";
@@ -40,9 +40,10 @@ class App extends React.Component<IDefaultComponentProps, IAppUserState> {
   }
 
   unSubscribeAuth: any = null;
+  unSubscribeUserSnapShot: any = null;
 
   componentDidMount() {
-    this.unSubscribeAuth = auth.onAuthStateChanged(user => {
+    this.unSubscribeAuth = auth.onAuthStateChanged(async user => {
       if (user) {
         const currentUser = {} as ISignedInUserInfo;
         currentUser.displayName = user.displayName;
@@ -51,9 +52,16 @@ class App extends React.Component<IDefaultComponentProps, IAppUserState> {
         currentUser.photoUrl = user.photoURL;
         currentUser.uid = user.uid;
 
-        this.setState({
-          currentUser
-        });
+        const userRef = await createOrSetUpUserBySignIn(currentUser, {});
+        if(userRef) {
+          this.unSubscribeUserSnapShot = userRef.onSnapshot(snapShot => {
+            this.setState({
+              currentUser: snapShot.data() as ISignedInUserInfo
+            });
+          })
+        }
+
+       
       } else {
         this.setState({
           currentUser: undefined
@@ -68,6 +76,7 @@ class App extends React.Component<IDefaultComponentProps, IAppUserState> {
 
   componentWillMount() {
     if (this.unSubscribeAuth) this.unSubscribeAuth();
+    if(this.unSubscribeUserSnapShot) this.unSubscribeUserSnapShot();
   }
 
   render() {

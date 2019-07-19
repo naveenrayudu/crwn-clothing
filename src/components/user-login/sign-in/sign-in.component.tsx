@@ -1,71 +1,167 @@
 import React, { SyntheticEvent } from "react";
 import IDefaultComponentProps from "../../../models/interfaces/IDefaultComponentProps";
 import FormInput from "../../form-input/form-input.component";
-import { IFormInputHandler } from "../../../models/interfaces/IFormInputHandler";
+import {
+  IFormInputHandler,
+  IValidationTypes
+} from "../../../models/interfaces/IFormInputHandler";
 
-import { signInWithGoogle } from "../../../firebase/firebase.util";
+import { signInWithGoogle, auth } from "../../../firebase/firebase.util";
 
 import "./sign-in.styles.scss";
 import CustomButtom from "../../custom-button/custom-button.component";
+import { validateInput } from "../../../utilities/validateFields";
 
-interface ISignInState {
+interface ISignInFields {
   email: IFormInputHandler;
   password: IFormInputHandler;
 }
+
+type ISignInState = {
+  form: {
+    isValid: boolean;
+    errorMessage: string;
+    fields: ISignInFields;
+  };
+};
 
 class SignIn extends React.Component<IDefaultComponentProps, ISignInState> {
   constructor(props: IDefaultComponentProps) {
     super(props);
     this.state = {
-      email: {
-        id: "email",
-        labelName: "Email",
-        name: "email",
-        type: "email",
-        value: "",
+      form: {
         isValid: false,
-        isTouched: false,
-        placeholder: "Email",
-        validation: {
-          required: true,
-          errorMessage: "Email is required."
-        }
-      },
-      password: {
-        id: "password",
-        labelName: "Password",
-        name: "password",
-        type: "password",
-        value: "",
-        isValid: false,
-        isTouched: false,
-        placeholder: "Password",
-        validation: {
-          required: true,
-          errorMessage: "Password is required."
+        errorMessage: "",
+        fields: {
+          email: {
+            id: "email",
+            labelName: "Email",
+            name: "email",
+            type: "email",
+            value: "",
+            isValid: false,
+            isTouched: false,
+            placeholder: "Email",
+            errorMessage: "",
+            validation: {
+              required: {
+                errorMessage: "Email is required."
+              },
+              typeProperty: {
+                type: "email",
+                errorMessage: "Invalid email address."
+              }
+            }
+          },
+          password: {
+            id: "password",
+            labelName: "Password",
+            name: "password",
+            type: "password",
+            value: "",
+            isValid: false,
+            isTouched: false,
+            placeholder: "Password",
+            errorMessage: "",
+            validation: {
+              required: {
+                errorMessage: "Password is required."
+              }
+            }
+          }
         }
       }
     };
   }
 
-  onFormInputChangeHandler = (
-    e: SyntheticEvent,
-    targetField: keyof ISignInState
-  ) => {
-    const inputField: IFormInputHandler = { ...this.state[targetField] };
-    if (
-      e.target instanceof HTMLInputElement ||
-      e.target instanceof HTMLSelectElement
-    ) {
-      inputField.value = e.target.value;
+  onFormInputChange = (e: SyntheticEvent, targetField: keyof ISignInState) => {
+    if (e.target instanceof HTMLInputElement) {
+      const targetName: keyof ISignInFields = e.target
+        .name as keyof ISignInFields;
+
+      let updatedForm = this.validateFields(targetName, e.target.value, [
+        "required"
+      ]);
+
+      updatedForm.errorMessage = "";
+
       this.setState({
-        [targetField]: inputField
-      } as Pick<ISignInState, keyof ISignInState>);
+        form: updatedForm
+      });
     }
   };
 
-  onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  onFormInputBlur = (e: SyntheticEvent) => {
+    if (e.target instanceof HTMLInputElement) {
+      const updatedForm = this.validateFields(
+        e.target.name as keyof ISignInFields,
+        e.target.value,
+        ["required", "typeProperty"]
+      );
+
+      this.setState({
+        form: updatedForm
+      });
+    }
+  };
+
+  validateFields = (
+    name: keyof ISignInFields,
+    value: string,
+    propsToVerify: (keyof IValidationTypes)[]
+  ) => {
+    const updatedForm = {
+      ...this.state.form
+    };
+
+    let inputState: IFormInputHandler = {
+      ...(this.state.form.fields[name] as IFormInputHandler),
+      value: value
+    };
+
+    updatedForm.fields[name] = validateInput(inputState, propsToVerify);
+    updatedForm.isValid = true;
+    for (const prop in updatedForm.fields) {
+      if (updatedForm.fields.hasOwnProperty(prop)) {
+        if (!updatedForm.fields[prop as keyof ISignInFields].isValid) {
+          updatedForm.isValid = false;
+        }
+      }
+    }
+
+    return updatedForm;
+  };
+
+  onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    let formState = { ...this.state.form };
+    const keys = Object.keys(formState.fields);
+
+    keys.forEach(key => {
+      let transFormedKey = key as keyof ISignInFields;
+      formState = this.validateFields(
+        transFormedKey,
+        formState.fields[transFormedKey].value,
+        ["required", "typeProperty"]
+      );
+    });
+
+    if (formState.isValid) {
+      const emailValue = this.state.form.fields.email.value;
+      const passwordValue = this.state.form.fields.password.value;
+
+      try {
+        await auth.signInWithEmailAndPassword(
+          emailValue,
+          passwordValue
+        );
+      } catch (error) {
+        formState.errorMessage = error.message;
+        this.setState({
+          form: formState
+        });
+      }
+    }
   };
 
   render() {
@@ -74,32 +170,37 @@ class SignIn extends React.Component<IDefaultComponentProps, ISignInState> {
         <h2>I already have an account</h2>
         <span>Sign in with your email and password</span>
 
-        <form onSubmit={this.onFormSubmit}>
+        <form noValidate>
           <FormInput
-            {...this.state.email}
-            onChangeHandler={(e: SyntheticEvent) =>
-              this.onFormInputChangeHandler(e, "email")
-            }
-            errorMessage={this.state.email.validation.errorMessage}
+            {...this.state.form.fields.email}
+            onChangeHandler={this.onFormInputChange}
+            onBlur={this.onFormInputBlur}
+            errorMessage={this.state.form.fields.email.errorMessage}
           />
           <FormInput
-            {...this.state.password}
-            onChangeHandler={(e: SyntheticEvent) =>
-              this.onFormInputChangeHandler(e, "password")
-            }
-            errorMessage={this.state.password.validation.errorMessage}
+            {...this.state.form.fields.password}
+            onChangeHandler={this.onFormInputChange}
+            onBlur={this.onFormInputBlur}
+            errorMessage={this.state.form.fields.password.errorMessage}
           />
+
+          {this.state.form.errorMessage ? (
+            <div className="error">{this.state.form.errorMessage}</div>
+          ) : null}
 
           <div className="singIn-button--container">
             <CustomButtom
               type="button"
-              onClick={() =>
-                console.log(this.state.email.value, this.state.password.value)
-              }
+              disabled={!this.state.form.isValid}
+              onClick={this.onFormSubmit}
             >
               Sign In
             </CustomButtom>
-            <CustomButtom type="button" onClick={signInWithGoogle} isGoogleSignIn={true}>
+            <CustomButtom
+              type="button"
+              onClick={signInWithGoogle}
+              isGoogleSignIn={true}
+            >
               Sign With Google
             </CustomButtom>
           </div>

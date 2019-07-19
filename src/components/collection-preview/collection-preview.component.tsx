@@ -10,7 +10,7 @@ const CollectionPreview: React.FC<ISHOP_DATA> = ({ title, items }) => {
             <h1 className="title">{title}</h1>
             <div className="preview">
                 {items.filter((item, idx) => idx < 4).map(item => (
-                   <CollectionItem key={item.id} {...item}></CollectionItem>
+                   <CollectionItem key={item.id} cartItem={item}></CollectionItem>
                 ))}
             </div>
         </div>

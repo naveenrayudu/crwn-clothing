@@ -4,8 +4,11 @@
 
 .item-count {
     position: absolute;
-    left: 37%;
     top: 25%;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 .cart-icon {

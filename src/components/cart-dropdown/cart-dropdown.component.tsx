@@ -4,10 +4,9 @@ import CustomButton from '../custom-button/custom-button.component';
 
 import './cart-dropdown.styles.scss';
 import { AppState } from '../../store/reducers/rootReducer';
-import { cartState } from '../../store/reducers/carts/cartReducer';
 
 
-const CartDropdown: React.FC<cartState> = ({showCart}) => {
+const CartDropdown: React.FC<{showCart: boolean}> = ({showCart}) => {
     return (
         <div className={`${!showCart? 'hideCart': ''} cart-dropdown`}>
             <div className="cart-items"></div>

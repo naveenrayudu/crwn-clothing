@@ -5,6 +5,8 @@ import { ReactComponent as Logo } from "../../assets/crown.svg";
 
 import "./header.styles.scss";
 import { ISignedInUserInfo } from "../../models/interfaces/IUserAccount";
+import CartIcon from "../cart-icon/cart-icon.component";
+import CartDropdown from "../cart-dropdown/cart-dropdown.component";
 
 interface IUserHeaderProps {
   currentUser: undefined | ISignedInUserInfo;
@@ -45,7 +47,13 @@ const Header: React.FunctionComponent<IUserHeaderProps> = ({
         </Link>
 
         {renderUserLinks()}
+
+        <div>
+          <CartIcon></CartIcon>
+        </div>
       </div>
+      
+      <CartDropdown></CartDropdown>
     </div>
   );
 };

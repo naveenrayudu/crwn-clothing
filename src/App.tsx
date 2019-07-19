@@ -1,14 +1,17 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import HomePage from "./pages/homepage/homepage.component";
 import { auth, createOrSetUpUserBySignIn } from "./firebase/firebase.util";
+import {connect} from 'react-redux';
 
 import "./App.css";
+
+import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shoppage/shoppage.component";
 import Header from "./components/header/header.component";
 import SignInAndSignUp from "./pages/sign-in-and-sign-uppage/sign-in-and-sign-up.component";
 import IDefaultComponentProps from "./models/interfaces/IDefaultComponentProps";
 import { ISignedInUserInfo } from "./models/interfaces/IUserAccount";
+import { setSignInUser, setSignOutUser } from "./store/actions/userAction";
 
 const NotFoundPage: React.FC = () => {
   return (
@@ -26,18 +29,13 @@ const NotFoundPage: React.FC = () => {
   );
 };
 
-type IAppUserState = {
-  currentUser?: ISignedInUserInfo;
-};
 
-class App extends React.Component<IDefaultComponentProps, IAppUserState> {
-  constructor(props: IDefaultComponentProps) {
-    super(props);
+interface IAppComponentProps extends IDefaultComponentProps {
+  setSignInUser: any,
+  setSignOutUser: any
+}
 
-    this.state = {
-      currentUser: undefined
-    };
-  }
+class App extends React.Component<IAppComponentProps> {
 
   unSubscribeAuth: any = null;
   unSubscribeUserSnapShot: any = null;
@@ -53,39 +51,36 @@ class App extends React.Component<IDefaultComponentProps, IAppUserState> {
         currentUser.uid = user.uid;
 
         const userRef = await createOrSetUpUserBySignIn(currentUser, {});
-        if(userRef) {
+        if (userRef) {
           this.unSubscribeUserSnapShot = userRef.onSnapshot(snapShot => {
-            this.setState({
-              currentUser: snapShot.data() as ISignedInUserInfo
-            });
-          })
+            this.props.setSignInUser(snapShot.data() as ISignedInUserInfo);
+          });
         }
-
-       
       } else {
-        this.setState({
-          currentUser: undefined
-        });
+        this.props.setSignOutUser();
       }
     });
   }
 
-  onSignOut = () => {
-    auth.signOut();
-  }
+  onSignOut =  () => {
+     auth.signOut();
+  };
 
   componentWillMount() {
     if (this.unSubscribeAuth) this.unSubscribeAuth();
-    if(this.unSubscribeUserSnapShot) this.unSubscribeUserSnapShot();
+    if (this.unSubscribeUserSnapShot) this.unSubscribeUserSnapShot();
   }
 
   render() {
     return (
       <div className="app-container">
-        <Header currentUser={this.state.currentUser} onSignOut={this.onSignOut} />
+        <Header onSignOut={this.onSignOut} />
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/signin" render={(props) => <SignInAndSignUp {...props} currentUser={this.state.currentUser} />} />
+          <Route
+            path="/signin"
+            component={SignInAndSignUp}
+          />
           <Route path="/shop" component={ShopPage} />
           <Route component={NotFoundPage} />
         </Switch>
@@ -94,4 +89,8 @@ class App extends React.Component<IDefaultComponentProps, IAppUserState> {
   }
 }
 
-export default App;
+
+export default connect(null, {
+  setSignInUser,
+  setSignOutUser
+})(App);

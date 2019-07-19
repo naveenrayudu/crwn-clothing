@@ -27,6 +27,82 @@ type ISignUpState = {
   };
 };
 
+
+const signUpFormFeilds: ISignUpFields =  {
+    email: {
+      id: "email",
+      name: "email",
+      value: "",
+      labelName: "Email",
+      placeholder: "Email",
+      isTouched: false,
+      isValid: false,
+      type: "email",
+      errorMessage: "",
+      validation: {
+        required: {
+          errorMessage: "Email is required"
+        },
+        typeProperty: {
+          type: "email",
+          errorMessage: "Invalid email address."
+        }
+      }
+    },
+    displayName: {
+      id: "displayName",
+      name: "displayName",
+      value: "",
+      labelName: "Display Name",
+      placeholder: "Display Name",
+      isTouched: false,
+      isValid: false,
+      type: "text",
+      errorMessage: "",
+      validation: {
+        required: {
+          errorMessage: "Display Name is required"
+        }
+      }
+    },
+    password: {
+      id: "password",
+      name: "password",
+      value: "",
+      labelName: "Password",
+      placeholder: "Password",
+      isTouched: false,
+      isValid: false,
+      type: "password",
+      errorMessage: "",
+      validation: {
+        required: {
+          errorMessage: "Password is required"
+        }
+      }
+    },
+    confirmPassword: {
+      id: "confirmPassword",
+      name: "confirmPassword",
+      value: "",
+      labelName: "Confirm Password",
+      placeholder: "Confirm Password",
+      isTouched: false,
+      isValid: false,
+      type: "password",
+      errorMessage: "",
+      validation: {
+        required: {
+          errorMessage: "Confirm Password is required"
+        },
+        dependentProperty: {
+          value: "",
+          errorMessage: "Password and confirm password dont match"
+        }
+      }
+    }
+  }
+
 class SignUp extends React.Component<IDefaultComponentProps, ISignUpState> {
   constructor(props: IDefaultComponentProps) {
     super(props);
@@ -35,80 +111,7 @@ class SignUp extends React.Component<IDefaultComponentProps, ISignUpState> {
       form: {
         isValid: false,
         errorMessage: '',
-        fields: {
-          email: {
-            id: "email",
-            name: "email",
-            value: "",
-            labelName: "Email",
-            placeholder: "Email",
-            isTouched: false,
-            isValid: false,
-            type: "email",
-            errorMessage: "",
-            validation: {
-              required: {
-                errorMessage: "Email is required"
-              },
-              typeProperty: {
-                type: "email",
-                errorMessage: "Invalid email address."
-              }
-            }
-          },
-          displayName: {
-            id: "displayName",
-            name: "displayName",
-            value: "",
-            labelName: "Display Name",
-            placeholder: "Display Name",
-            isTouched: false,
-            isValid: false,
-            type: "text",
-            errorMessage: "",
-            validation: {
-              required: {
-                errorMessage: "Display Name is required"
-              }
-            }
-          },
-          password: {
-            id: "password",
-            name: "password",
-            value: "",
-            labelName: "Password",
-            placeholder: "Password",
-            isTouched: false,
-            isValid: false,
-            type: "password",
-            errorMessage: "",
-            validation: {
-              required: {
-                errorMessage: "Password is required"
-              }
-            }
-          },
-          confirmPassword: {
-            id: "confirmPassword",
-            name: "confirmPassword",
-            value: "",
-            labelName: "Confirm Password",
-            placeholder: "Confirm Password",
-            isTouched: false,
-            isValid: false,
-            type: "password",
-            errorMessage: "",
-            validation: {
-              required: {
-                errorMessage: "Confirm Password is required"
-              },
-              dependentProperty: {
-                value: "",
-                errorMessage: "Password and confirm password dont match"
-              }
-            }
-          }
-        }
+        fields: signUpFormFeilds
       }
     };
   }

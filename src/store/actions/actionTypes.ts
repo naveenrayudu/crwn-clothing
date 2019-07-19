@@ -1,0 +1,1 @@
+export const SET_SIGN_IN_USER = 'SET_SIGN_IN_USER';

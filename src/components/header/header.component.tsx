@@ -1,16 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 
 import "./header.styles.scss";
 import { ISignedInUserInfo } from "../../models/interfaces/IUserAccount";
 
 interface IUserHeaderProps {
-  currentUser?: ISignedInUserInfo;
-  onSignOut?: any
+  currentUser: undefined | ISignedInUserInfo;
+  onSignOut?: any;
 }
 
-const Header: React.FunctionComponent<IUserHeaderProps> = ({ currentUser, onSignOut }) => {
+const Header: React.FunctionComponent<IUserHeaderProps> = ({
+  currentUser,
+  onSignOut
+}) => {
   const renderUserLinks = () => {
     if (currentUser && currentUser.email) {
       return (
@@ -46,4 +50,10 @@ const Header: React.FunctionComponent<IUserHeaderProps> = ({ currentUser, onSign
   );
 };
 
-export default Header;
+const mapStateToProps = (state: any) => {
+  return {
+    currentUser: state.user.currentUser as ISignedInUserInfo
+  };
+};
+
+export default connect(mapStateToProps)(Header);

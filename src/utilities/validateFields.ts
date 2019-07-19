@@ -1,11 +1,13 @@
 import { IFormInputHandler, IValidationTypes } from "../models/interfaces/IFormInputHandler";
 
+// eslint-disable-next-line
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export const validateInput = (inputToVerify: IFormInputHandler, propsToVerify: (keyof IValidationTypes)[]): IFormInputHandler => {
     inputToVerify.isTouched = true;
     inputToVerify.isValid = true;
 
+    // eslint-disable-next-line
     propsToVerify.some(prop => {
         if (inputToVerify.validation[prop]) {
             let isValid = true;

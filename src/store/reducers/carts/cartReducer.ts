@@ -8,7 +8,8 @@ export type cartState = {
     items: {
         [id: string] : {
             item: IItemData,
-            quantity: number
+            quantity: number,
+            dateAdded: number
         }
     }
 }
@@ -31,10 +32,12 @@ const cartReducer = (state = INITIAL_STATE, action: IDefaultAction) => {
            const cartItemToAdd = action.payload as IItemData;
            if(items[cartItemToAdd.id]) {
                 items[cartItemToAdd.id].quantity++;
+                items[cartItemToAdd.id].dateAdded = new Date().getTime() 
            } else {
                items[cartItemToAdd.id] = {
                    item: cartItemToAdd,
-                   quantity: 1
+                   quantity: 1,
+                   dateAdded: new Date().getTime()
                }
            }
 

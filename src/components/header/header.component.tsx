@@ -7,6 +7,7 @@ import "./header.styles.scss";
 import { ISignedInUserInfo } from "../../models/interfaces/IUserAccount";
 import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
+import { reselectCurrentUser } from "../../store/reducers/users/userSelector";
 
 interface IUserHeaderProps {
   currentUser: undefined | ISignedInUserInfo;
@@ -60,7 +61,7 @@ const Header: React.FunctionComponent<IUserHeaderProps> = ({
 
 const mapStateToProps = (state: any) => {
   return {
-    currentUser: state.user.currentUser as ISignedInUserInfo
+    currentUser: reselectCurrentUser(state)
   };
 };
 

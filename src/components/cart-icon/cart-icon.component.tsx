@@ -5,6 +5,7 @@ import { ReactComponent as ShoppingBagIcon } from "../../assets/shopping-bag.svg
 import "./cart-item.styles.scss";
 import { showHideCart } from "../../store/actions/cartActions";
 import { AppState } from "../../store/reducers/rootReducer";
+import { cartItemsCountSelector } from "../../store/reducers/carts/cartSelector";
 
 type cartIconProps = {
   showHideCart: any;
@@ -22,7 +23,7 @@ const CartIcon: React.FC<cartIconProps> = ({ showHideCart, itemCount }) => {
 
 const mapStateToProps = (state: AppState) => {
   return {
-    itemCount: state.cart.itemCount
+    itemCount: cartItemsCountSelector(state)
   };
 };
 

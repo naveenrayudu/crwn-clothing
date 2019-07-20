@@ -1,0 +1,15 @@
+.cart-item {
+    display: flex;
+    align-items: center;
+
+    img {
+        height: 5.5em;
+        width: 4.5em;
+    }
+
+    .item-details {
+        display: flex;
+        flex-direction: column;
+        margin-left: 2em;
+    }
+}

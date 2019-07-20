@@ -7,6 +7,7 @@ import SignIn from "../../components/user-login/sign-in/sign-in.component";
 import SignUp from "../../components/user-login/sign-up/sign-up.component";
 import { AppState } from "../../store/reducers/rootReducer";
 import { IUserInfo } from "../../models/interfaces/IRootReducer";
+import { reselectCurrentUser } from "../../store/reducers/users/userSelector";
 
 type ISignInSignUpProps =  RouteComponentProps & IUserInfo;
 
@@ -34,7 +35,7 @@ class SignInAndSignUp extends React.Component<ISignInSignUpProps, any> {
 
 const mapStateToProps = (state: AppState) => {
   return {
-    currentUser: state.user.currentUser
+    currentUser: reselectCurrentUser(state)
   }
 }
 

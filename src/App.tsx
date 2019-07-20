@@ -1,7 +1,9 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import { auth, createOrSetUpUserBySignIn } from "./firebase/firebase.util";
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
 
@@ -12,6 +14,7 @@ import SignInAndSignUp from "./pages/sign-in-and-sign-uppage/sign-in-and-sign-up
 import IDefaultComponentProps from "./models/interfaces/IDefaultComponentProps";
 import { ISignedInUserInfo } from "./models/interfaces/IUserAccount";
 import { setSignInUser, setSignOutUser } from "./store/actions/userAction";
+import CheckoutPage from "./pages/checkoutpage/checkout.component";
 
 const NotFoundPage: React.FC = () => {
   return (
@@ -29,14 +32,12 @@ const NotFoundPage: React.FC = () => {
   );
 };
 
-
 interface IAppComponentProps extends IDefaultComponentProps {
-  setSignInUser: any,
-  setSignOutUser: any
+  setSignInUser: any;
+  setSignOutUser: any;
 }
 
 class App extends React.Component<IAppComponentProps> {
-
   unSubscribeAuth: any = null;
   unSubscribeUserSnapShot: any = null;
 
@@ -62,8 +63,8 @@ class App extends React.Component<IAppComponentProps> {
     });
   }
 
-  onSignOut =  () => {
-     auth.signOut();
+  onSignOut = () => {
+    auth.signOut();
   };
 
   componentWillMount() {
@@ -77,20 +78,30 @@ class App extends React.Component<IAppComponentProps> {
         <Header onSignOut={this.onSignOut} />
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route
-            path="/signin"
-            component={SignInAndSignUp}
-          />
+          <Route path="/signin" component={SignInAndSignUp} />
           <Route path="/shop" component={ShopPage} />
+          <Route path="/checkout" component={CheckoutPage} />
           <Route component={NotFoundPage} />
         </Switch>
+
+        <ToastContainer
+          className="toast-container"
+          toastClassName="dark-toast"
+          newestOnTop
+          pauseOnHover={false}
+          autoClose={3000}
+          position="top-right"
+          draggable={false}
+        />
       </div>
     );
   }
 }
 
-
-export default connect(null, {
-  setSignInUser,
-  setSignOutUser
-})(App);
+export default connect(
+  null,
+  {
+    setSignInUser,
+    setSignOutUser
+  }
+)(App);

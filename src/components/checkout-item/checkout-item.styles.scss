@@ -1,0 +1,37 @@
+.checkout-item {
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+    border-top: 2px solid #8080803d;
+
+    & > * {
+        flex: 1;
+    }
+
+    img {
+        height: 6em;
+        width: 6em;
+    }
+
+    &:first-of-type {
+        margin-top: 20px;
+    }
+
+    .remove-button {
+        cursor: pointer;
+        font-weight: 900;
+    }
+
+    .arrow {
+        display: inline-block;
+        cursor: pointer;
+
+        &:first-of-type {
+            padding-right: 10px;
+        }
+
+        &:last-of-type {
+            padding-left: 10px;
+        }
+    }
+}

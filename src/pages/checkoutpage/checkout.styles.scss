@@ -1,0 +1,46 @@
+
+.checkout-table-display {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: auto;
+    max-width: 1000px;
+
+    .checkout-header {
+        display: flex;
+        align-items: center;
+        margin-right: 16px;
+        
+        & > * {
+            flex: 1;
+        }
+    }
+
+    .checkout-header {
+        .header-block {
+            font-weight: 600;
+        }
+    }
+
+    .checkout-table-body {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .total-cost {
+        text-align: center;
+        font-size: 24px;
+        border-top: 2px solid lightgray;
+        padding-top: 10px;
+
+        &--label {
+            font-size: 16px;
+        }
+    }
+
+    .currency-symbol {
+        font-weight: 600;
+        margin: 0 5px;
+    }
+
+}

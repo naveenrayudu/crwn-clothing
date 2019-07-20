@@ -4,57 +4,67 @@ import CustomButton from "../custom-button/custom-button.component";
 
 import "./cart-dropdown.styles.scss";
 import { AppState } from "../../store/reducers/rootReducer";
-import IItemData from "../../models/interfaces/IItemData";
 import CartItem from "../cart-item/cart-item.component";
-import { cartItemsSelector, cartShowSelector } from "../../store/reducers/carts/cartSelector";
+import {
+  cartItemsSelector,
+  cartShowSelector
+} from "../../store/reducers/carts/cartSelector";
 import { createStructuredSelector } from "reselect";
+import { withRouter, RouteComponentProps } from "react-router";
+import { cartItemState } from "../../store/reducers/carts/cartReducer";
+import { showHideCart } from "../../store/actions/cartActions";
 
 type cartDropdownType = {
   showCart: boolean;
-  cartItems: {
-    [id: string]: {
-      item: IItemData;
-      quantity: number;
-      dateAdded: number;
-    };
-  };
+  cartItems: cartItemState[];
 };
+type cartDropdownWithRouteType = RouteComponentProps & cartDropdownType;
 
-const CartDropdown: React.FC<cartDropdownType> = ({ showCart, cartItems }) => {
+const CartDropdown: React.FC<cartDropdownWithRouteType & {showHideCart: any}> = ({
+  showCart,
+  cartItems,
+  showHideCart,
+  history
+}) => {
   const generateCartItems = () => {
-    const cartItemsToShow = [];
-    for (let id in cartItems) {
-      cartItemsToShow.push(
+    return cartItems.map(item => {
+      return (
         <CartItem
-          key={cartItems[id].dateAdded}
-          item={cartItems[id].item}
-          quantity={cartItems[id].quantity}
+          key={item.dateAdded}
+          item={item.item}
+          quantity={item.quantity}
         />
       );
-    }
-    return cartItemsToShow.sort((a: any, b: any) => {
-      if (a.key < b.key) return 1;
-      if (a.key > b.key) return -1;
-      return 0;
     });
   };
 
   return (
     <div className={`${!showCart ? "hideCart" : ""} cart-dropdown`}>
-      <div className="cart-items">{generateCartItems()}</div>
-      <CustomButton
-        type="button"
-        onClick={() => console.log("Clicked for checkout")}
-      >
-        GO TO CHECKOUT
-      </CustomButton>
+      {!Object.keys(cartItems).length ? (
+        <div className="empty-message">Your cart is empty</div>
+      ) : (
+        <React.Fragment>
+          <div className="cart-items">{generateCartItems()}</div>
+          <CustomButton
+            type="button"
+            onClick={() => {
+              showHideCart();
+              history.push("/checkout");
+            }}
+          >
+            GO TO CHECKOUT
+          </CustomButton>
+        </React.Fragment>
+      )}
     </div>
   );
 };
 
 const mapStateToProps = createStructuredSelector<AppState, cartDropdownType>({
-    showCart: cartShowSelector,
-    cartItems: cartItemsSelector
-})
+  showCart: cartShowSelector,
+  cartItems: cartItemsSelector
+});
 
-export default connect(mapStateToProps)(CartDropdown);
+export default withRouter(connect(mapStateToProps, {
+  showHideCart
+})(CartDropdown));

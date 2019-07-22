@@ -13,11 +13,19 @@ import rootReducer from "./store/reducers/rootReducer";
 import logger from "./store/middlewares/logger";
 import toasterMiddleware from "./store/middlewares/toaster-notification";
 
-const composeEnhancers =
-  (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
-const enhancer = composeEnhancers(applyMiddleware(logger, toasterMiddleware));
+let store = createStore(
+  rootReducer,
+  applyMiddleware(logger, toasterMiddleware)
+);
 
-const store = createStore(rootReducer, enhancer);
+if (process.env.NODE_ENV === "development") {
+  const composeEnhancers =
+    (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+  const enhancer = composeEnhancers(applyMiddleware(logger, toasterMiddleware));
+
+  store = createStore(rootReducer, enhancer);
+}
+
 const persistor = persistStore(store);
 
 ReactDOM.render(

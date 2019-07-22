@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import { cartItemState } from "../../store/reducers/carts/cartReducer";
 import CheckoutItem from "../../components/checkout-item/checkout-item.component";
 import { withRouter, RouteComponentProps } from "react-router";
+import StripeButton from "../../components/stripe-button/stripe-button.component";
 
 type checkoutPageType = {
   cartItems: cartItemState[];
@@ -58,6 +59,12 @@ const CheckoutPage: React.FC<checkoutPageType & RouteComponentProps> = ({
           {totalCost}
         </div>
       </div>
+
+      {totalCost > 0 ? (
+        <div className="checkout-pay-btn">
+          <StripeButton price={totalCost} />
+        </div>
+      ) : null}
     </div>
   );
 };

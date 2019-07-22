@@ -1,4 +1,8 @@
+
+
+
 .collection-preview {
+    position: relative;
     display: flex;
     flex-direction: column;
     margin-bottom: 30px;
@@ -8,9 +12,52 @@
       margin-bottom: 25px;
     }
   
-    .preview {
+    .preview-to-animate {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
+
+
+      .left-enter {
+        left: -100%;
+      }
+      .left-enter-active {
+        left: 0%;
+        transition: left 1s cubic-bezier(.36,.47,.51,.94);
+      }
+      
+      .right-enter {
+        right: -100%;
+      }
+      .right-enter-active {
+        right: 0%;
+        transition: right 1s cubic-bezier(.36,.47,.51,.94);
+      }
+      
+    }
+
+    .collection-item:not(:first-of-type) {
+      margin-left: 4vw;
+    }
+
+    .fetch-buttons {
+      position: absolute;
+      top: 50%;
+      font-size: 3em;
+      z-index: 3;
+      cursor: pointer;
+      background-color: lightgray;
+
+      &:hover {
+        opacity: 0.6;
+      }
+
+      &.next {
+        right: 0;
+      }
+
+      &.hide {
+        display: none;
+      }
     }
   }
   

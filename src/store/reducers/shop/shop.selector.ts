@@ -13,7 +13,7 @@ export const shopCollectionSelector = (collectionUrlParam: string) => {
 export const shopCollectionPreviewSelector = createSelector([shopCollectionsSelector], (shopCollection: Shop_Data_Type) => {
    return Object.keys(shopCollection).map(key => {
         const shopCollectionItem = {...shopCollection[key]};
-        shopCollectionItem.items = shopCollectionItem.items.filter((item, idx) => idx < 4);
+        // shopCollectionItem.items = shopCollectionItem.items.filter((item, idx) => idx < 4);
         return shopCollectionItem;
     })
 })

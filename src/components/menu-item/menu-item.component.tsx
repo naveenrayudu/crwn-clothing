@@ -2,14 +2,10 @@ import React from "react";
 import {withRouter} from 'react-router-dom';
 import "./menu-item.styles.scss";
 import { RouteComponentProps } from "react-router";
+import { IDirectortItemData } from "../../models/interfaces/IItemData";
 
 
-interface IRouterMenuItem extends RouteComponentProps {
-    title: string, 
-    imageUrl: string,
-    size?: string, 
-    linkUrl: string
-}
+type IRouterMenuItem = RouteComponentProps & IDirectortItemData
 
 const MenuItem: React.FC<IRouterMenuItem> = ({ title, imageUrl, size, linkUrl, history, match }) => {
     return (

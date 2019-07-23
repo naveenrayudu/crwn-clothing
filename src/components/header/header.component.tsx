@@ -1,13 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 
-import "./header.styles.scss";
+// import "./header.styles.scss";
 import { ISignedInUserInfo } from "../../models/interfaces/IUserAccount";
 import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
 import { reselectCurrentUser } from "../../store/reducers/users/userSelector";
+import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink } from "./header.styles";
 
 interface IUserHeaderProps {
   currentUser: undefined | ISignedInUserInfo;
@@ -21,41 +21,41 @@ const Header: React.FunctionComponent<IUserHeaderProps> = ({
   const renderUserLinks = () => {
     if (currentUser && currentUser.email) {
       return (
-        <Link className="option" to="/" onClick={onSignOut}>
+        <OptionLink  to="/" onClick={onSignOut}>
           SIGN OUT
-        </Link>
+        </OptionLink>
       );
     }
 
     return (
-      <Link className="option" to="/signin">
+      <OptionLink to="/signin">
         SIGN IN
-      </Link>
+      </OptionLink>
     );
   };
 
   return (
-    <div className="header">
-      <Link to="/" className="logo-container">
+    <HeaderContainer>
+      <LogoContainer to="/" >
         <Logo />
-      </Link>
-      <div className="options">
-        <Link className="option" to="/shop">
+      </LogoContainer>
+      <OptionsContainer>
+        <OptionLink to="/shop">
           SHOP
-        </Link>
-        <Link className="option" to="/shop">
+        </OptionLink>
+        <OptionLink to="/shop">
           CONTACT
-        </Link>
+        </OptionLink>
 
         {renderUserLinks()}
 
         <div>
           <CartIcon></CartIcon>
         </div>
-      </div>
+      </OptionsContainer>
       
       <CartDropdown></CartDropdown>
-    </div>
+    </HeaderContainer>
   );
 };
 

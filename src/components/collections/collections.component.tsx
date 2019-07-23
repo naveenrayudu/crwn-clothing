@@ -1,29 +1,18 @@
 import React from "react";
-import { createStructuredSelector } from "reselect";
-import { shopCollectionSelector } from "../../store/reducers/shop/shop.selector";
 import ISHOP_DATA from "../../models/interfaces/IShopData";
-import { connect } from "react-redux";
-import { match, RouterProps } from "react-router";
-import { AppState } from "../../store/reducers/rootReducer";
 import CollectionItem from "../collection-item/collection-item.component";
 
 import "./collections.styles.scss";
 
-type CollectionsPageType = {
+export type CollectionsPageType = {
   collection: ISHOP_DATA | undefined;
 };
 
-type routeMatchParam = {
-  match: match<{
-    collectionsId: string;
-  }>;
-} & RouterProps;
 
-const CollectionsPage: React.FC<CollectionsPageType & routeMatchParam> = ({
-  collection,
-  history
+const CollectionsPage: React.FC<CollectionsPageType> = ({
+  collection
 }) => {
-  if (!collection) {
+  if (!collection || !collection.items) {
     return null;
   }
 
@@ -40,9 +29,6 @@ const CollectionsPage: React.FC<CollectionsPageType & routeMatchParam> = ({
   );
 };
 
-const mapStateToProps = (state: AppState, ownProps: routeMatchParam) =>
-  createStructuredSelector<AppState, routeMatchParam, CollectionsPageType>({
-    collection: shopCollectionSelector(ownProps.match.params.collectionsId)
-  });
 
-export default connect(mapStateToProps)(CollectionsPage);
+
+export default CollectionsPage;

@@ -1,24 +1,43 @@
 
 import IDefaultAction from '../../../models/interfaces/IActions';
-import { ADD_COLLECTIONS } from '../../actions/actionTypes';
+import { FETCH_COLLECTIONS_SUCCESS, FETCH_COLLECTIONS_START, FETCH_COLLECTIONS_ERROR } from '../../actions/actionTypes';
 import ISHOP_DATA from '../../../models/interfaces/IShopData';
 
 export type Shop_Data_Type = {
-    [key: string] :  ISHOP_DATA
-  }
+    [key: string]: ISHOP_DATA
+}
 
-  
+export type Shop_Store_Type = {
+    collections: Shop_Data_Type,
+    isLoading: boolean
+}
+
 // const INITIAL_STATE: Shop_Data_Type = SHOP_DATA;
-const INITIAL_STATE: Shop_Data_Type = {};
+const INITIAL_STATE: Shop_Store_Type = {
+    collections: {} as Shop_Data_Type,
+    isLoading: false
+};
 
-const shopReducer = (state=INITIAL_STATE, action: IDefaultAction) => {
+const shopReducer = (state = INITIAL_STATE, action: IDefaultAction) => {
     switch (action.type) {
-        case ADD_COLLECTIONS:
+        case FETCH_COLLECTIONS_START:
             return {
-                ...action.payload
+                ...state,
+                isLoading: true
+            }
+        case FETCH_COLLECTIONS_ERROR:
+            return {
+                ...state,
+                isLoading: false
+            }
+        case FETCH_COLLECTIONS_SUCCESS:
+            return {
+                ...state,
+                collections: action.payload,
+                isLoading: false
             }
         default:
-           return state;
+            return state;
     }
 }
 

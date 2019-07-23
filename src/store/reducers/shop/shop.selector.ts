@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect';
 import { AppState } from '../rootReducer';
-import { Shop_Data_Type } from './shop.reducer';
+import { Shop_Data_Type, Shop_Store_Type } from './shop.reducer';
 
 
 const shop = (state: AppState) => state.shop;
-export const shopCollectionsSelector = createSelector(shop, (shopData: Shop_Data_Type) => shopData);
+export const shopCollectionsSelector = createSelector(shop, (shopData: Shop_Store_Type) => shopData.collections);
 export const shopCollectionSelector = (collectionUrlParam: string) => {
     return createSelector([shopCollectionsSelector], collections => {
         return collections[collectionUrlParam];
@@ -17,3 +17,5 @@ export const shopCollectionPreviewSelector = createSelector([shopCollectionsSele
         return shopCollectionItem;
     })
 })
+
+export const shopIsLoadingSelector =  createSelector(shop, (shopData: Shop_Store_Type) => shopData.isLoading);

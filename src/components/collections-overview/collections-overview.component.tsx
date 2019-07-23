@@ -1,8 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { AppState } from "../../store/reducers/rootReducer";
-import { shopCollectionPreviewSelector } from "../../store/reducers/shop/shop.selector";
 import CollectionPreview from "../collection-preview/collection-preview.component";
 import ISHOP_DATA from "../../models/interfaces/IShopData";
 
@@ -20,8 +16,5 @@ const CollectionsOverview: React.FC<IShopPageProps> = ({ shopData = [] }) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector<AppState, IShopPageProps>({
-  shopData: shopCollectionPreviewSelector
-});
 
-export default connect(mapStateToProps)(CollectionsOverview);
+export default CollectionsOverview;

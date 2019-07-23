@@ -7,7 +7,7 @@ import { match, RouterProps } from "react-router";
 import { AppState } from "../../store/reducers/rootReducer";
 import CollectionItem from "../collection-item/collection-item.component";
 
-import './collections.styles.scss';
+import "./collections.styles.scss";
 
 type CollectionsPageType = {
   collection: ISHOP_DATA | undefined;
@@ -24,11 +24,10 @@ const CollectionsPage: React.FC<CollectionsPageType & routeMatchParam> = ({
   history
 }) => {
   if (!collection) {
-    history.push("/shop");
+    return null;
   }
 
   const { title, items } = collection as ISHOP_DATA;
-
   return (
     <div className="collections-page">
       <h2 className="title">{title}</h2>

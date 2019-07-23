@@ -2,6 +2,9 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import { ISignedInUserInfo } from '../models/interfaces/IUserAccount';
+import IItemData from '../models/interfaces/IItemData';
+import ISHOP_DATA from '../models/interfaces/IShopData';
+import { Shop_Data_Type } from '../store/reducers/shop/shoppage.data';
 
 firebase.initializeApp({
     apiKey: "AIzaSyBGHIw6SKOlWnQHBdkNjIWJZbOS8N28p8c",
@@ -52,6 +55,43 @@ export const createOrSetUpUserBySignIn = async (userAuth: ISignedInUserInfo, add
     }
 
     return userDoc;
+}
+
+export const createAndSetUpDocsForCollection = (collectionName: string, documents: Object[]) => {
+   const collectionRef = firestore.collection(collectionName);
+    const batch = firestore.batch();
+
+    documents.forEach(doc => {
+        batch.set(collectionRef.doc(), doc);
+    })
+
+    batch.commit().then((datas) => {
+        console.log(datas);
+    })
+}
+
+
+export const convertCollectionSnapshotToMap =  (collections: firebase.firestore.QuerySnapshot) => {
+    const collectionsArray: ISHOP_DATA[] = collections.docs.map(doc => {
+        const {title, items} = doc.data() as {
+            title: string,
+            items: IItemData[]
+        };
+
+        return {
+            title,
+            items,
+            routeName: encodeURI(title.toLowerCase()),
+            id: doc.id
+        }
+    });
+
+    return collectionsArray.reduce((acc, ini)=> {
+        acc[ini.title.toLowerCase()] = ini;
+        return acc;
+    }, {
+        
+    } as Shop_Data_Type)
 }
 
 

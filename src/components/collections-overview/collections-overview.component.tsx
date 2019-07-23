@@ -10,7 +10,7 @@ interface IShopPageProps {
   shopData: ISHOP_DATA[];
 }
 
-const CollectionsOverview: React.FC<IShopPageProps> = ({ shopData }) => {
+const CollectionsOverview: React.FC<IShopPageProps> = ({ shopData = [] }) => {
   return (
     <div className="collections-overview">
       {shopData.map(collection => (

@@ -71,7 +71,6 @@ const cartReducer = (state = INITIAL_STATE, action: IDefaultAction) => {
         case REMOVE_FROM_CART:
             const cartItemsToDelete = { ...state.items };
             if (cartItemsToDelete[action.payload].quantity === 1) {
-                debugger;
                 return cartClearReducer(state, action);
             }
             else {

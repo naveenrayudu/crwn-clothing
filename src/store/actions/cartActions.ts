@@ -14,7 +14,6 @@ export const showHideCart = () => (dispatch: Dispatch<IDefaultAction>) => {
 }
 
 export const addToCart = (cartItem: IItemData, showToaster?: boolean) => (dispatch: Dispatch<IToasterAction>) => {
-    debugger;
     dispatch({
         type: ADD_TO_CART,
         payload: cartItem,

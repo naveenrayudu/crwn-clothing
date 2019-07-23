@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import { auth, createOrSetUpUserBySignIn } from "./firebase/firebase.util";
+import { auth, createOrSetUpUserBySignIn, createAndSetUpDocsForCollection } from "./firebase/firebase.util";
 import { connect } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,7 +35,7 @@ const NotFoundPage: React.FC = () => {
 interface IAppComponentProps extends IDefaultComponentProps {
   setSignInUser: any;
   setSignOutUser: any;
-}
+} 
 
 class App extends React.Component<IAppComponentProps> {
   unSubscribeAuth: any = null;
@@ -61,13 +61,22 @@ class App extends React.Component<IAppComponentProps> {
         this.props.setSignOutUser();
       }
     });
+
+    // createAndSetUpDocsForCollection('collections', this.props.shop.map(t => {
+    //   return {
+    //     title: t.title,
+    //     items: t.items
+    //   }
+    // }));
+
+    
   }
 
   onSignOut = () => {
     auth.signOut();
   };
 
-  componentWillMount() {
+  componentWillUnmount() {
     if (this.unSubscribeAuth) this.unSubscribeAuth();
     if (this.unSubscribeUserSnapShot) this.unSubscribeUserSnapShot();
   }
@@ -98,8 +107,7 @@ class App extends React.Component<IAppComponentProps> {
   }
 }
 
-export default connect(
-  null,
+export default connect(null,
   {
     setSignInUser,
     setSignOutUser

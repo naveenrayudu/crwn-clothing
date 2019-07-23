@@ -8,6 +8,7 @@ interface ICustomButton {
   isGoogleSignIn?: boolean;
   disabled?: boolean;
   inverted?: boolean;
+  className?: string
 }
 
 const CustomButton: React.FC<ICustomButton> = ({ children, ...otherProps }) => {

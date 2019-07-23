@@ -26,7 +26,7 @@ const CollectionItem: React.FC<ICollectionItemType> = ({addToCart, cartItem}) =>
         <span className="price">${price}</span>
       </div>
 
-      <CustomButton type="button" inverted={true} onClick={() => addToCart(cartItem, true)}>ADD TO CART</CustomButton>
+      <CustomButton className="custom-button" type="button" inverted={true} onClick={() => addToCart(cartItem, true)}>ADD TO CART</CustomButton>
     </div>
   );
 };

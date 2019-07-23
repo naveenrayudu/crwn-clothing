@@ -4,7 +4,8 @@ import 'firebase/firestore';
 import { ISignedInUserInfo } from '../models/interfaces/IUserAccount';
 import IItemData from '../models/interfaces/IItemData';
 import ISHOP_DATA from '../models/interfaces/IShopData';
-import { Shop_Data_Type } from '../store/reducers/shop/shoppage.data';
+import { Shop_Data_Type } from '../store/reducers/shop/shop.reducer';
+
 
 firebase.initializeApp({
     apiKey: "AIzaSyBGHIw6SKOlWnQHBdkNjIWJZbOS8N28p8c",

@@ -6,7 +6,7 @@ import { shopCollectionPreviewSelector } from "../../store/reducers/shop/shop.se
 import CollectionPreview from "../collection-preview/collection-preview.component";
 import ISHOP_DATA from "../../models/interfaces/IShopData";
 
-interface IShopPageProps {
+export interface IShopPageProps {
   shopData: ISHOP_DATA[];
 }
 

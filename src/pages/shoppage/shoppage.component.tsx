@@ -5,21 +5,35 @@ import CollectionsPage from "../../components/collections/collections.component"
 import { firestore, convertCollectionSnapshotToMap } from "../../firebase/firebase.util";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { Shop_Data_Type } from "../../store/reducers/shop/shoppage.data";
 import IDefaultAction from "../../models/interfaces/IActions";
 import { ADD_COLLECTIONS } from "../../store/actions/actionTypes";
+import { Shop_Data_Type } from "../../store/reducers/shop/shop.reducer";
+import WithSpinner from "../../components/hoc/with-spinner/with-spinner.component";
 
 type ShopPageType = {
     match: match,
     addCollections: any
 }
 
-class ShopPage extends React.Component<ShopPageType>  {
+
+class ShopPage extends React.Component<ShopPageType, {isLoading: boolean}>  {
+    constructor(props: ShopPageType) {
+        super(props);
+        this.state = {
+            isLoading :false
+        }
+    }
 
     componentDidMount() {
+        this.setState({
+            isLoading: true
+        })
         firestore.collection('collections').get()
             .then(collections => {
                this.props.addCollections(convertCollectionSnapshotToMap(collections));
+               this.setState({
+                isLoading: false
+            })
             })
     }
 
@@ -29,8 +43,20 @@ class ShopPage extends React.Component<ShopPageType>  {
         return (
          
             <div className="shop-page">
-                <Route exact path={`${match.path}`}  component={CollectionsOverview} />
-                <Route path={`${match.path}/:collectionsId`} component={CollectionsPage}/>
+                <Route exact path={`${match.path}`} render={(props) => {
+                      return  WithSpinner(CollectionsOverview)({
+                            isLoading: this.state.isLoading,
+                            otherProps: props
+                        })
+                    }
+                }  />
+                <Route path={`${match.path}/:collectionsId`} render={(props) => {
+                      return  WithSpinner(CollectionsPage)({
+                            isLoading: this.state.isLoading,
+                            otherProps: props
+                        })
+                    }
+                } />
             </div>
         );
     }

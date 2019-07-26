@@ -1,15 +1,20 @@
 import React from "react";
-import {withRouter, RouteComponentProps} from 'react-router-dom';
-import {connect} from 'react-redux'
+import { withRouter, RouteComponentProps } from "react-router-dom";
+import { connect } from "react-redux";
 
 import "./sign-in-and-sign-up.styles.scss";
-import SignIn from "../../components/user-login/sign-in/sign-in.component";
-import SignUp from "../../components/user-login/sign-up/sign-up.component";
 import { AppState } from "../../store/reducers/rootReducer";
 import { IUserInfo } from "../../models/interfaces/IRootReducer";
-import { reselectCurrentUser } from "../../store/reducers/users/userSelector";
+import {
+  reselectCurrentUser,
+  reselectCurrentUserLoading
+} from "../../store/reducers/users/userSelector";
+import SignInConnector from "../../components/user-login/sign-in/sign-in.connector";
+import SignUpConnetctor from "../../components/user-login/sign-up/sign-up.container";
+import { compose } from "redux"; 
+import WithSpinnerOverlay from "../../components/hoc/with-spinner-overlay/with-spinner-overlay.component";
 
-type ISignInSignUpProps =  RouteComponentProps & IUserInfo;
+type ISignInSignUpProps = RouteComponentProps & IUserInfo;
 
 class SignInAndSignUp extends React.Component<ISignInSignUpProps, any> {
   componentDidMount() {
@@ -25,18 +30,22 @@ class SignInAndSignUp extends React.Component<ISignInSignUpProps, any> {
   render() {
     return (
       <div className="sign-up-and-sign-in">
-        <SignIn />
-        <SignUp />
+        <SignInConnector />
+        <SignUpConnetctor />
       </div>
     );
   }
 }
 
-
 const mapStateToProps = (state: AppState) => {
   return {
-    currentUser: reselectCurrentUser(state)
-  }
-}
+    currentUser: reselectCurrentUser(state),
+    isLoading: reselectCurrentUserLoading(state)
+  };
+};
 
-export default connect(mapStateToProps)(withRouter(SignInAndSignUp));
+export default compose<React.ComponentType>(
+  connect(mapStateToProps),
+  WithSpinnerOverlay,
+  withRouter
+)(SignInAndSignUp);

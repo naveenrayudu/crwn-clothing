@@ -60,19 +60,17 @@ class CollectionPreview extends React.Component<
       <div className="collection-preview">
         <h1 className="title">{this.props.title}</h1>
         <div className="preview">
-          <TransitionGroup>
-            <div className="preview-to-animate">
-              {this.state.itemsToDisplay.map(item => (
-                <CSSTransition
-                  in={true}
-                  key={item.id}
-                  timeout={300}
-                  classNames={`${this.animationDirection}`}
-                >
-                  <CollectionItem key={item.id} cartItem={item} />
-                </CSSTransition>
-              ))}
-            </div>
+          <TransitionGroup className="preview-to-animate">
+            {this.state.itemsToDisplay.map(item => (
+              <CSSTransition
+                in={true}
+                key={item.id}
+                timeout={300}
+                classNames={`${this.animationDirection}`}
+              >
+                <CollectionItem key={item.id} cartItem={item} />
+              </CSSTransition>
+            ))}
           </TransitionGroup>
 
           <div

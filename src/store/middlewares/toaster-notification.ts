@@ -10,7 +10,7 @@ const toasterMiddleware = (store: any) => (next: any) => (action: any | IToaster
 
             toast.success((action as IToasterAction)!.successMessage, {
                 hideProgressBar: true,
-                delay: 300
+                delay: 100
             });
         }
         return result;
@@ -20,7 +20,7 @@ const toasterMiddleware = (store: any) => (next: any) => (action: any | IToaster
 
         toast.error((action as IToasterAction)!.errorMessage, {
             hideProgressBar: true,
-            delay: 300
+            delay: 100
         });
      
         throw error;

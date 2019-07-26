@@ -9,8 +9,6 @@ import CustomButton from "../../custom-button/custom-button.component";
 
 import "./sign-up.styles.scss";
 import { validateInput } from "../../../utilities/validateFields";
-import { auth, createOrSetUpUserBySignIn } from "../../../firebase/firebase.util";
-import { ISignedInUserInfo } from "../../../models/interfaces/IUserAccount";
 
 type ISignUpFields = {
   displayName: IFormInputHandler;
@@ -22,95 +20,97 @@ type ISignUpFields = {
 type ISignUpState = {
   form: {
     isValid: boolean;
-    errorMessage: string,
+    errorMessage: string;
     fields: ISignUpFields;
   };
 };
 
-
-const signUpFormFeilds: ISignUpFields =  {
-    email: {
-      id: "email",
-      name: "email",
-      value: "",
-      labelName: "Email",
-      placeholder: "Email",
-      isTouched: false,
-      isValid: false,
-      type: "email",
-      errorMessage: "",
-      validation: {
-        required: {
-          errorMessage: "Email is required"
-        },
-        typeProperty: {
-          type: "email",
-          errorMessage: "Invalid email address."
-        }
+const signUpFormFeilds: ISignUpFields = {
+  email: {
+    id: "email",
+    name: "email",
+    value: "",
+    labelName: "Email",
+    placeholder: "Email",
+    isTouched: false,
+    isValid: false,
+    type: "email",
+    errorMessage: "",
+    validation: {
+      required: {
+        errorMessage: "Email is required"
+      },
+      typeProperty: {
+        type: "email",
+        errorMessage: "Invalid email address."
       }
-    },
-    displayName: {
-      id: "displayName",
-      name: "displayName",
-      value: "",
-      labelName: "Display Name",
-      placeholder: "Display Name",
-      isTouched: false,
-      isValid: false,
-      type: "text",
-      errorMessage: "",
-      validation: {
-        required: {
-          errorMessage: "Display Name is required"
-        }
+    }
+  },
+  displayName: {
+    id: "displayName",
+    name: "displayName",
+    value: "",
+    labelName: "Display Name",
+    placeholder: "Display Name",
+    isTouched: false,
+    isValid: false,
+    type: "text",
+    errorMessage: "",
+    validation: {
+      required: {
+        errorMessage: "Display Name is required"
       }
-    },
-    password: {
-      id: "password",
-      name: "password",
-      value: "",
-      labelName: "Password",
-      placeholder: "Password",
-      isTouched: false,
-      isValid: false,
-      type: "password",
-      errorMessage: "",
-      validation: {
-        required: {
-          errorMessage: "Password is required"
-        }
+    }
+  },
+  password: {
+    id: "password",
+    name: "password",
+    value: "",
+    labelName: "Password",
+    placeholder: "Password",
+    isTouched: false,
+    isValid: false,
+    type: "password",
+    errorMessage: "",
+    validation: {
+      required: {
+        errorMessage: "Password is required"
       }
-    },
-    confirmPassword: {
-      id: "confirmPassword",
-      name: "confirmPassword",
-      value: "",
-      labelName: "Confirm Password",
-      placeholder: "Confirm Password",
-      isTouched: false,
-      isValid: false,
-      type: "password",
-      errorMessage: "",
-      validation: {
-        required: {
-          errorMessage: "Confirm Password is required"
-        },
-        dependentProperty: {
-          value: "",
-          errorMessage: "Password and confirm password dont match"
-        }
+    }
+  },
+  confirmPassword: {
+    id: "confirmPassword",
+    name: "confirmPassword",
+    value: "",
+    labelName: "Confirm Password",
+    placeholder: "Confirm Password",
+    isTouched: false,
+    isValid: false,
+    type: "password",
+    errorMessage: "",
+    validation: {
+      required: {
+        errorMessage: "Confirm Password is required"
+      },
+      dependentProperty: {
+        value: "",
+        errorMessage: "Password and confirm password dont match"
       }
     }
   }
+};
 
-class SignUp extends React.Component<IDefaultComponentProps, ISignUpState> {
-  constructor(props: IDefaultComponentProps) {
+type signUpType = {
+  signInWithEmail: any;
+} & IDefaultComponentProps;
+class SignUp extends React.Component<signUpType, ISignUpState> {
+  constructor(props: signUpType) {
     super(props);
 
     this.state = {
       form: {
         isValid: false,
-        errorMessage: '',
+        errorMessage: "",
         fields: signUpFormFeilds
       }
     };
@@ -131,27 +131,22 @@ class SignUp extends React.Component<IDefaultComponentProps, ISignUpState> {
       );
     });
 
-    if(formState.isValid) {
-       const emailValue = this.state.form.fields.email.value;
-       const passwordValue = this.state.form.fields.password.value;
+    if (formState.isValid) {
+      const emailValue = this.state.form.fields.email.value;
+      const passwordValue = this.state.form.fields.password.value;
+      const displayName = this.state.form.fields.displayName.value;
 
-        try {
-            const {user} = await auth.createUserWithEmailAndPassword(emailValue, passwordValue);
-            let signedUpUser = {} as ISignedInUserInfo;
-            signedUpUser.email = user!.email;
-            signedUpUser.displayName = this.state.form.fields.displayName.value;
-            signedUpUser.emailVerified =  user!.emailVerified;
-            signedUpUser.uid = user!.uid;
-
-
-            if(user)
-                await createOrSetUpUserBySignIn(signedUpUser, {});
-        } catch (error) {
-            formState.errorMessage = error.message;
-            this.setState({
-                form: formState
-            })
+      this.props.signInWithEmail(
+        emailValue,
+        passwordValue,
+        displayName,
+        (error: any) => {
+          formState.errorMessage = error.message;
+          this.setState({
+            form: formState
+          });
         }
+      );
     }
   };
 
@@ -179,7 +174,7 @@ class SignUp extends React.Component<IDefaultComponentProps, ISignUpState> {
         );
       }
 
-      updatedForm.errorMessage = '';
+      updatedForm.errorMessage = "";
 
       this.setState({
         form: updatedForm
@@ -252,12 +247,14 @@ class SignUp extends React.Component<IDefaultComponentProps, ISignUpState> {
             onChangeHandler={this.onFormInputChange}
             onBlur={this.onFormInputBlur}
             errorMessage={this.state.form.fields.email.errorMessage}
+            autoComplete="off"
           />
           <FormInput
             {...this.state.form.fields.password}
             onChangeHandler={this.onFormInputChange}
             onBlur={this.onFormInputBlur}
             errorMessage={this.state.form.fields.password.errorMessage}
+            autoComplete="off"
           />
           <FormInput
             {...this.state.form.fields.confirmPassword}
@@ -266,15 +263,9 @@ class SignUp extends React.Component<IDefaultComponentProps, ISignUpState> {
             errorMessage={this.state.form.fields.confirmPassword.errorMessage}
           />
 
-          {
-              this.state.form.errorMessage ? (
-                <div className="error">
-                    {this.state.form.errorMessage}
-                </div>
-              ): null
-          }
-
-         
+          {this.state.form.errorMessage ? (
+            <div className="error">{this.state.form.errorMessage}</div>
+          ) : null}
 
           <CustomButton
             disabled={!this.state.form.isValid}

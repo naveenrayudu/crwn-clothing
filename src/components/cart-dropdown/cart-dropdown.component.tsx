@@ -12,7 +12,8 @@ import {
 import { createStructuredSelector } from "reselect";
 import { withRouter, RouteComponentProps } from "react-router";
 import { cartItemState } from "../../store/reducers/carts/cartReducer";
-import { showHideCart } from "../../store/actions/cartActions";
+import { Dispatch } from "redux";
+import { SHOW_CART_DROPDOWN_START } from "../../store/actions/actionTypes";
 
 type cartDropdownType = {
   showCart: boolean;
@@ -65,6 +66,12 @@ const mapStateToProps = createStructuredSelector<AppState, cartDropdownType>({
   cartItems: cartItemsSelector
 });
 
-export default withRouter(connect(mapStateToProps, {
-  showHideCart
-})(CartDropdown));
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    showHideCart: () => dispatch({
+      type: SHOW_CART_DROPDOWN_START
+    })
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CartDropdown));

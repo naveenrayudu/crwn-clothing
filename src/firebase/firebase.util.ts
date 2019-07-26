@@ -58,6 +58,15 @@ export const createOrSetUpUserBySignIn = async (userAuth: ISignedInUserInfo, add
     return userDoc;
 }
 
+export const getCurrentuser = async () => {
+    return new Promise((resolve, reject) => {
+        const unsubscriber =  auth.onAuthStateChanged((userAuth) => {
+            unsubscriber();
+            resolve(userAuth)
+        }, reject);
+    });
+}
+
 export const createAndSetUpDocsForCollection = (collectionName: string, documents: Object[]) => {
    const collectionRef = firestore.collection(collectionName);
     const batch = firestore.batch();

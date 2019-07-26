@@ -16,23 +16,43 @@
       display: flex;
       justify-content: flex-start;
 
+      .right-enter {
+        right: -100%;
+        opacity: 0;
+        transition: right 1s cubic-bezier(.36,.47,.51,.94);
+      }
+
+      .right-enter-active {
+        right: -50%;
+        opacity: 0.5;
+        transition: right 1s cubic-bezier(.36,.47,.51,.94);
+      }
+
+      .right-enter-end {
+        right: 0%;
+        opacity: 1;
+        transition: right 1s cubic-bezier(.36,.47,.51,.94);
+      }
 
       .left-enter {
         left: -100%;
+        opacity: 0;
+        transition: left 1s cubic-bezier(.36,.47,.51,.94);
+       
       }
       .left-enter-active {
+        left: -50%;
+        opacity: 0.5;
+        transition: left 1s cubic-bezier(.36,.47,.51,.94);
+      }
+
+      .left-enter-end {
         left: 0%;
+        opacity: 1;
         transition: left 1s cubic-bezier(.36,.47,.51,.94);
       }
       
-      .right-enter {
-        right: -100%;
-      }
-      .right-enter-active {
-        right: 0%;
-        transition: right 1s cubic-bezier(.36,.47,.51,.94);
-      }
-      
+     
     }
 
     .collection-item:not(:first-of-type) {

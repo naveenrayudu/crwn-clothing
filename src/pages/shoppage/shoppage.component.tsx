@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, match } from "react-router";
 import { connect } from "react-redux";
 import { AppState } from "../../store/reducers/rootReducer";
@@ -14,28 +14,25 @@ type ShopPageType = {
   isLoading: boolean;
 };
 
-class ShopPage extends React.Component<ShopPageType> {
-  componentDidMount() {
-    this.props.loadCollections();
-  }
+const ShopPage: React.FC<ShopPageType> = ({ loadCollections, match }) => {
+  useEffect(() => {
+    loadCollections();
+  }, [loadCollections]);
 
-  render() {
-    const { match } = this.props;
-    return (
-      <div className="shop-page">
-        <Route
-          exact
-          path={`${match.path}`}
-          component={CollectionsOverviewContainer}
-        />
-        <Route
-          path={`${match.path}/:collectionsId`}
-          component={CollectionsContainer}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="shop-page">
+      <Route
+        exact
+        path={`${match.path}`}
+        component={CollectionsOverviewContainer}
+      />
+      <Route
+        path={`${match.path}/:collectionsId`}
+        component={CollectionsContainer}
+      />
+    </div>
+  );
+};
 
 const mapStateToProps = (state: AppState) => {
   return {
@@ -43,12 +40,13 @@ const mapStateToProps = (state: AppState) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) =>{
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    loadCollections: () =>  dispatch({
+    loadCollections: () =>
+      dispatch({
         type: FETCH_COLLECTIONS_START
       })
-    }
+  };
 };
 
 export default connect(

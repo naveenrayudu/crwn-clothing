@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Switch, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { ToastContainer } from "react-toastify";
@@ -38,7 +38,9 @@ interface IAppComponentProps extends IDefaultComponentProps {
 }
 
 const App: React.FC<IAppComponentProps> = ({ setSignOutUser, verifyUserSession }) => {
-  verifyUserSession();
+  useEffect(() => {
+    verifyUserSession();
+  }, [verifyUserSession])
   
   return (
     <div className="app-container">

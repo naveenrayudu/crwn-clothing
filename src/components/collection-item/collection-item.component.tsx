@@ -1,17 +1,21 @@
 import React from "react";
 import IItemData from "../../models/interfaces/IItemData";
 
-import './collection-item.styles.scss';
+import "./collection-item.styles.scss";
 import CustomButton from "../custom-button/custom-button.component";
 import { connect } from "react-redux";
-import { addToCart } from "../../store/actions/cartActions";
+import { Dispatch } from "redux";
+import { ADD_TO_CART_START } from "../../store/actions/actionTypes";
 
 type ICollectionItemType = {
-  cartItem : IItemData,
-  addToCart: any
-}
+  cartItem: IItemData;
+  addToCart: any;
+};
 
-const CollectionItem: React.FC<ICollectionItemType> = ({addToCart, cartItem}) => {
+const CollectionItem: React.FC<ICollectionItemType> = ({
+  addToCart,
+  cartItem
+}) => {
   const { name, imageUrl, price } = cartItem;
   return (
     <div className="collection-item">
@@ -26,11 +30,33 @@ const CollectionItem: React.FC<ICollectionItemType> = ({addToCart, cartItem}) =>
         <span className="price">${price}</span>
       </div>
 
-      <CustomButton className="custom-button" type="button" inverted={true} onClick={() => addToCart(cartItem, true)}>ADD TO CART</CustomButton>
+      <CustomButton
+        className="custom-button"
+        type="button"
+        inverted={true}
+        onClick={() => addToCart(cartItem)}
+      >
+        ADD TO CART
+      </CustomButton>
     </div>
   );
 };
 
-export default connect(null, {
-  addToCart
-})(CollectionItem);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    addToCart: (cartItem: IItemData) => {
+      dispatch({
+        type: ADD_TO_CART_START,
+        payload: {
+          cartItem,
+          showToaster: true
+        }
+      });
+    }
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(CollectionItem);

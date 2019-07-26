@@ -6,8 +6,6 @@ import {
   IValidationTypes
 } from "../../../models/interfaces/IFormInputHandler";
 
-import { signInWithGoogle, auth } from "../../../firebase/firebase.util";
-
 import "./sign-in.styles.scss";
 import CustomButtom from "../../custom-button/custom-button.component";
 import { validateInput } from "../../../utilities/validateFields";
@@ -25,8 +23,14 @@ type ISignInState = {
   };
 };
 
-class SignIn extends React.Component<IDefaultComponentProps, ISignInState> {
-  constructor(props: IDefaultComponentProps) {
+
+type Sign_In_type = IDefaultComponentProps & {
+  signInWithGoogle: any,
+  signInWithEmail: any
+}
+
+class SignIn extends React.Component<Sign_In_type, ISignInState> {
+  constructor(props: Sign_In_type) {
     super(props);
     this.state = {
       form: {
@@ -132,7 +136,7 @@ class SignIn extends React.Component<IDefaultComponentProps, ISignInState> {
     return updatedForm;
   };
 
-  onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let formState = { ...this.state.form };
     const keys = Object.keys(formState.fields);
@@ -150,17 +154,12 @@ class SignIn extends React.Component<IDefaultComponentProps, ISignInState> {
       const emailValue = this.state.form.fields.email.value;
       const passwordValue = this.state.form.fields.password.value;
 
-      try {
-        await auth.signInWithEmailAndPassword(
-          emailValue,
-          passwordValue
-        );
-      } catch (error) {
+      this.props.signInWithEmail(emailValue, passwordValue, (error: any) => {
         formState.errorMessage = error.message;
         this.setState({
           form: formState
         });
-      }
+      })
     }
   };
 
@@ -198,7 +197,7 @@ class SignIn extends React.Component<IDefaultComponentProps, ISignInState> {
             </CustomButtom>
             <CustomButtom
               type="button"
-              onClick={signInWithGoogle}
+              onClick={this.props.signInWithGoogle}
               isGoogleSignIn={true}
             >
               Sign With Google

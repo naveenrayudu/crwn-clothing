@@ -7,6 +7,7 @@ interface IFormInputChangeHandler extends IInputHandler {
   errorMessage: string;
   onChangeHandler: any;
   onBlur?: any;
+  autoComplete?: string
 }
 
 const FormInput: React.FC<IFormInputChangeHandler> = ({
@@ -20,7 +21,8 @@ const FormInput: React.FC<IFormInputChangeHandler> = ({
   errorMessage,
   placeholder,
   onChangeHandler,
-  onBlur
+  onBlur,
+  autoComplete
 }) => {
   return (
     <div className="group">
@@ -32,6 +34,7 @@ const FormInput: React.FC<IFormInputChangeHandler> = ({
         value={value}
         onChange={onChangeHandler}
         onBlur={onBlur}
+        autoComplete= {autoComplete ? autoComplete: "off"}
       />
       <label className={`${value.length !== 0 ? 'shrink' : ''} form-input-label`} htmlFor="id">
         {labelName}

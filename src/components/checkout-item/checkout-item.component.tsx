@@ -3,7 +3,9 @@ import IItemData from "../../models/interfaces/IItemData";
 
 import "./checkout-item.styles.scss";
 import { connect } from "react-redux";
-import { clearFromCart, removeFromCart, addToCart } from "../../store/actions/cartActions";
+
+import { Dispatch } from "redux";
+import { CLEAR_FROM_CART_START, REMOVE_FROM_CART_START, ADD_TO_CART_START } from "../../store/actions/actionTypes";
 
 const CheckoutItem: React.FC<{
   cartItem: IItemData;
@@ -42,11 +44,40 @@ const CheckoutItem: React.FC<{
   );
 };
 
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    clearFromCart: (id: string) => {
+      dispatch({
+        type: CLEAR_FROM_CART_START,
+        payload: {
+          id: id,
+          showToaster: true
+        }
+      })
+    },
+    removeFromCart: (id: string) => {
+      dispatch({
+        type: REMOVE_FROM_CART_START,
+        payload: {
+          id: id,
+          showToaster: true
+        }
+      })
+    },
+    addToCart: (cartItem: IItemData) => {
+      dispatch({
+        type: ADD_TO_CART_START,
+        payload: {
+          cartItem,
+          showToaster: true
+        }
+      });
+    }
+  }
+}
+
 export default connect(
   null,
-  {
-    clearFromCart,
-    removeFromCart,
-    addToCart
-  }
+  mapDispatchToProps
 )(CheckoutItem);

@@ -21,6 +21,7 @@ const INITIAL_STATE: Shop_Store_Type = {
 const shopReducer = (state = INITIAL_STATE, action: IDefaultAction) => {
     switch (action.type) {
         case FETCH_COLLECTIONS_START:
+            console.log('Start')
             return {
                 ...state,
                 isLoading: true
@@ -31,6 +32,7 @@ const shopReducer = (state = INITIAL_STATE, action: IDefaultAction) => {
                 isLoading: false
             }
         case FETCH_COLLECTIONS_SUCCESS:
+            console.log('Success')
             return {
                 ...state,
                 collections: action.payload,

@@ -29,7 +29,7 @@ function* completePayPalPaymentAsync(action: {
    const response:{
         isSuccess: boolean,
        errorMessage?: string
-   } = yield fetch("http://localhost:3000/api/paypal/payment", {
+   } = yield fetch("/api/paypal/payment", {
         method: 'POST', 
         cache: 'no-cache', 
         headers: {

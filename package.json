@@ -1,53 +1,14 @@
 {
   "name": "crwn-clothing",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@types/jest": "24.0.15",
-    "@types/node": "12.6.6",
-    "@types/react": "16.8.23",
-    "@types/react-dom": "16.8.4",
-    "@types/react-redux": "^7.1.1",
-    "@types/react-router-dom": "^4.3.4",
-    "@types/react-transition-group": "^2.9.2",
-    "@types/styled-components": "^4.1.18",
-    "firebase": "^6.3.0",
-    "node-sass": "^4.12.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-redux": "^7.1.0",
-    "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1",
-    "react-stripe-checkout": "^2.6.3",
-    "react-stripe-elements": "^4.0.0",
-    "react-toastify": "^5.3.2",
-    "react-transition-group": "^4.2.1",
-    "redux": "^4.0.4",
-    "redux-persist": "^5.10.0",
-    "redux-saga": "^1.0.5",
-    "reselect": "^4.0.0",
-    "styled-components": "^4.3.2",
-    "typescript": "3.5.3"
-  },
+  "version": "1.0.0",
+  "description": "",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "node ./server/dist/index.js",
+    "dev": "concurrently \"cd ./server && npm run dev\"  \"cd ./client && npm run start\"",
+    "build": "cd ./client && npm run build && cd ./server && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "concurrently": "^4.1.1"
   }
 }

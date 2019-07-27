@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 const StripeButton: React.FC<{ price: number, completePayPalPayment: any }> = ({ price, completePayPalPayment }) => {
   const priceForStripe = price * 100;
   const onToken = (token: Token) => {
-    completePayPalPayment(token, price);
+    completePayPalPayment(token.id, priceForStripe);
   };
 
   return (
@@ -33,7 +33,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       dispatch({
         type: COMPLETE_USER_PAYPAL_START,
         payload: {
-          token
+          token,
+          amount
         }
       })
     }

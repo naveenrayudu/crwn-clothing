@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, "..", "..", "client", "build")));
 
-app.get("/api/paypal/payment", async (req, res) => {
+app.post("/api/paypal/payment", async (req, res) => {
     try {
         const response = await stripeApp.charges.create({
             amount: req.body.amount,
@@ -24,7 +24,7 @@ app.get("/api/paypal/payment", async (req, res) => {
         });
     } catch (error) {
         return res.send({
-            errorMessage: "Unable to complete the charge",
+            errorMessage: error,
             isSuccess: false,
         });
     }

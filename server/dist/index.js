@@ -21,7 +21,7 @@ const stripeApp = new stripe_1.default(process.env.STRIPE_KEY);
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(body_parser_1.default.json());
 app.use(express_1.default.static(path_1.default.join(__dirname, "..", "..", "client", "build")));
-app.get("/api/paypal/payment", (req, res) => __awaiter(this, void 0, void 0, function* () {
+app.post("/api/paypal/payment", (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
         const response = yield stripeApp.charges.create({
             amount: req.body.amount,
@@ -34,7 +34,7 @@ app.get("/api/paypal/payment", (req, res) => __awaiter(this, void 0, void 0, fun
     }
     catch (error) {
         return res.send({
-            errorMessage: "Unable to complete the charge",
+            errorMessage: error,
             isSuccess: false,
         });
     }

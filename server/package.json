@@ -15,8 +15,10 @@
   "dependencies": {
     "@types/body-parser": "^1.17.0",
     "@types/node": "^12.6.8",
+    "@types/stripe": "^6.31.9",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "stripe": "^7.5.0",
     "tsc-watch": "^2.2.1",
     "typescript": "^3.5.3"
   },

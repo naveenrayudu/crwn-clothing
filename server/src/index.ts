@@ -1,13 +1,34 @@
+import bodyParser from "body-parser";
 import express from "express";
 import path from "path";
+import stripe from "stripe";
 
 const app = express();
 const port = process.env.PORT || 3001;
+const stripeApp = new stripe(process.env.STRIPE_KEY);
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, "..", "..", "client", "build")));
 
-app.get("/api/paypal/payment", (req, res) => {
-    return res.send("Paypal transactions");
+app.get("/api/paypal/payment", async (req, res) => {
+    try {
+        const response = await stripeApp.charges.create({
+            amount: req.body.amount,
+            currency: "usd",
+            source: req.body.token,
+        });
+        return res.send({
+            isSuccess: true,
+        });
+    } catch (error) {
+        return res.send({
+            errorMessage: "Unable to complete the charge",
+            isSuccess: false,
+        });
+    }
+
 });
 
 app.get("/", (req, res) => {

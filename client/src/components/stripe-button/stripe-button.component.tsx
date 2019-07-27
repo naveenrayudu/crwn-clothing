@@ -1,10 +1,13 @@
 import React from "react";
 import StripeCheckout, { Token } from "react-stripe-checkout";
+import { Dispatch } from "redux";
+import { COMPLETE_USER_PAYPAL_START } from "../../store/actions/actionTypes";
+import { connect } from "react-redux";
 
-const StripeButton: React.FC<{ price: number }> = ({ price }) => {
+const StripeButton: React.FC<{ price: number, completePayPalPayment: any }> = ({ price, completePayPalPayment }) => {
   const priceForStripe = price * 100;
   const onToken = (token: Token) => {
-    console.log(token);
+    completePayPalPayment(token, price);
   };
 
   return (
@@ -24,4 +27,17 @@ const StripeButton: React.FC<{ price: number }> = ({ price }) => {
   );
 };
 
-export default StripeButton;
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    completePayPalPayment: (token: any, amount: number) => {
+      dispatch({
+        type: COMPLETE_USER_PAYPAL_START,
+        payload: {
+          token
+        }
+      })
+    }
+  }
+}
+
+export default connect(null, mapDispatchToProps) (StripeButton);

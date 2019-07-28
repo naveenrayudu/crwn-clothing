@@ -47,6 +47,6 @@ app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "..", "..", "client", "build", "index.html"));
 });
 app.listen(port, () => {
-    console.log("Node server starteda");
+    console.log("Node server started");
 });
 //# sourceMappingURL=index.js.map

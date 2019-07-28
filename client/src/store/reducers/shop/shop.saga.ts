@@ -1,5 +1,5 @@
-import { put, takeEvery, takeLatest, call, all} from 'redux-saga/effects';
-import { FETCH_COLLECTIONS_START, FETCH_COLLECTIONS_SUCCESS, COMPLETE_USER_PAYPAL_START } from '../../actions/actionTypes';
+import { put, takeEvery, takeLatest, call, all } from 'redux-saga/effects';
+import { FETCH_COLLECTIONS_START, FETCH_COLLECTIONS_SUCCESS, COMPLETE_USER_PAYPAL_START, CHECK_OUT_COMPLETE_SUCCESS } from '../../actions/actionTypes';
 import { firestore, convertCollectionSnapshotToMap } from '../../../firebase/firebase.util';
 
 
@@ -23,30 +23,41 @@ function* completePayPalPaymentAsync(action: {
     type: string,
     payload: {
         token: any,
-        amount: number
+        amount: number,
+        callback: any
     }
 }) {
-   const response:{
-        isSuccess: boolean,
-       errorMessage?: string
-   } = yield fetch("/api/paypal/payment", {
-        method: 'POST', 
-        cache: 'no-cache', 
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        referrer: 'no-referrer',
-        body: JSON.stringify({
-            token: action.payload.token,
-            amount: action.payload.amount
-        }), 
-    })
+    try {
+        const response: {
+            isSuccess: boolean,
+            errorMessage?: string
+        } = yield fetch("/api/paypal/payment", {
+            method: 'POST',
+            cache: 'no-cache',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            referrer: 'no-referrer',
+            body: JSON.stringify({
+                token: action.payload.token,
+                amount: action.payload.amount
+            }),
+        })
 
-    // clear the cart
-    if(response.isSuccess) {
-        console.log("Clear the cart");
-    } else { // display the error to user.
-        console.log(response.errorMessage);
+        // clear the cart
+        if (response.isSuccess) {
+            yield put({
+                type: CHECK_OUT_COMPLETE_SUCCESS,
+                payload: undefined
+            })
+
+            action.payload.callback(true);
+        } else { // display the error to user.
+            action.payload.callback(false);
+        }
+    } catch (error) {
+        debugger;
+        action.payload.callback(false);
     }
 }
 

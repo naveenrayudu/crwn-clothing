@@ -1,5 +1,5 @@
 import IDefaultAction from "../../../models/interfaces/IActions";
-import { SHOW_CART_DROPDOWN, ADD_TO_CART, CLEAR_FROM_CART, REMOVE_FROM_CART } from "../../actions/actionTypes";
+import { SHOW_CART_DROPDOWN, ADD_TO_CART, CLEAR_FROM_CART, REMOVE_FROM_CART, CHECK_OUT_COMPLETE_SUCCESS } from "../../actions/actionTypes";
 import IItemData from "../../../models/interfaces/IItemData";
 
 export type cartItemState = {
@@ -80,6 +80,12 @@ const cartReducer = (state = INITIAL_STATE, action: IDefaultAction) => {
                     items: cartItemsToDelete,
                     itemCount: state.itemCount - 1
                 }
+            }
+        case CHECK_OUT_COMPLETE_SUCCESS:
+            return {
+                ...state,
+                items: {},
+                itemCount: 0
             }
 
         default:

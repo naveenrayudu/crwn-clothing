@@ -41,5 +41,5 @@ app.get("*", (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log("Node server starteda");
+    console.log("Node server started");
 });

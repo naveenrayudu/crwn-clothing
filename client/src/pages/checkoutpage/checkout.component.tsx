@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./checkout.styles.scss";
 import { AppState } from "../../store/reducers/rootReducer";
@@ -22,8 +22,20 @@ const CheckoutPage: React.FC<checkoutPageType & RouteComponentProps> = ({
   cartItems,
   totalCost
 }) => {
+  const [checkOutStatus, updateCheckoutStatus] = useState(null);
+
   return (
     <div className="checkout-page">
+      {checkOutStatus === true ? (
+        <div className="checkout-success">Checkout success!!!</div>
+      ) : null}
+
+      {
+        checkOutStatus === false ?  (
+          <div className="checkout-failure">Error ooccured while doing your payment!!!</div>
+        ) : null
+      }
+
       <div className="checkout-table-display">
         <div className="checkout-header">
           <div className="header-block">
@@ -62,7 +74,7 @@ const CheckoutPage: React.FC<checkoutPageType & RouteComponentProps> = ({
 
       {totalCost > 0 ? (
         <div className="checkout-pay-btn">
-          <StripeButton price={totalCost} />
+          <StripeButton price={totalCost} paymentCallback={updateCheckoutStatus} />
         </div>
       ) : null}
     </div>

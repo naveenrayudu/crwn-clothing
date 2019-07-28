@@ -26,10 +26,7 @@ function* completePayPalPaymentAsync(action: {
     }
 }) {
     try {
-        const response: {
-            isSuccess: boolean,
-            errorMessage?: string
-        } = yield fetch("/api/paypal/payment", {
+       const responseStream = yield fetch("/api/paypal/payment", {
             method: 'POST',
             cache: 'no-cache',
             headers: {
@@ -41,6 +38,11 @@ function* completePayPalPaymentAsync(action: {
                 amount: action.payload.amount
             }),
         })
+
+        const response: {
+            isSuccess: boolean,
+            errorMessage?: string
+        } = yield responseStream.json();
 
         console.log(response);
 

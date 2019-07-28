@@ -44,8 +44,6 @@ function* completePayPalPaymentAsync(action: {
             errorMessage?: string
         } = yield responseStream.json();
 
-        console.log(response);
-
         // clear the cart
         if (response.isSuccess) {
             yield put({
@@ -58,7 +56,6 @@ function* completePayPalPaymentAsync(action: {
             action.payload.callback(false);
         }
     } catch (error) {
-        debugger;
         action.payload.callback(false);
     }
 }

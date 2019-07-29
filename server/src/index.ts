@@ -1,4 +1,5 @@
 import bodyParser from "body-parser";
+import compression from "compression";
 import express from "express";
 import path from "path";
 import stripe from "stripe";
@@ -9,6 +10,7 @@ const stripeApp = new stripe(process.env.STRIPE_KEY);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(compression());
 
 app.use(express.static(path.join(__dirname, "..", "..", "client", "build")));
 

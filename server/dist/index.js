@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const body_parser_1 = __importDefault(require("body-parser"));
+const compression_1 = __importDefault(require("compression"));
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const stripe_1 = __importDefault(require("stripe"));
@@ -20,6 +21,7 @@ const port = process.env.PORT || 3001;
 const stripeApp = new stripe_1.default(process.env.STRIPE_KEY);
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(body_parser_1.default.json());
+app.use(compression_1.default());
 app.use(express_1.default.static(path_1.default.join(__dirname, "..", "..", "client", "build")));
 app.post("/api/paypal/payment", (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {

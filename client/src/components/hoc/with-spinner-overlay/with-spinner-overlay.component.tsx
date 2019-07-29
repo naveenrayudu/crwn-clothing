@@ -1,5 +1,5 @@
 import React from "react";
-import './with-spinner-overlay.styles.scss';
+import SpinnerToDisplay from "../../spinner/spinner.component";
 
 export type withSpinnerTypes = {
   isLoading: boolean;
@@ -10,11 +10,7 @@ const WithSpinnerOverlay = function(ComponentToWrap: React.ComponentType) {
     const { isLoading, ...otherProps } = props;
     return (
       <div>
-        <div className={`${!isLoading ? "" : "spinnerOverlay-container"}`}>
-          <div className={`${!isLoading ? "" : "spinnerOverlay"}`}>
-            <div className={`${!isLoading ? "" : "spinnerContainer"}`} />
-          </div>
-        </div>
+        {isLoading ? <SpinnerToDisplay /> : null}
 
         <ComponentToWrap {...otherProps} />
       </div>

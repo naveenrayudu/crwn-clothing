@@ -23,6 +23,16 @@ app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(body_parser_1.default.json());
 app.use(compression_1.default());
 app.use(express_1.default.static(path_1.default.join(__dirname, "..", "..", "client", "build")));
+if (process.env.NODE_ENV === "production") {
+    app.use((req, res, next) => {
+        if (req.header("x-forwarded-proto") !== "https") {
+            res.redirect(`https://${req.header("host")}${req.url}`);
+        }
+        else {
+            next();
+        }
+    });
+}
 app.post("/api/paypal/payment", (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
         const response = yield stripeApp.charges.create({

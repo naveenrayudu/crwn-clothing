@@ -27,9 +27,9 @@ const CheckoutPage = React.lazy(() =>
   import("./pages/checkoutpage/checkout.component")
 );
 
-const NotFoundPage: React.FC = () => {
+export const NotFoundPage: React.FC = () => {
   return (
-    <div>
+    <div className="notFound--page">
       <div
         style={{
           backgroundImage: `url(../images/PageNotFound.jpg)`,
@@ -48,7 +48,23 @@ interface IAppComponentProps extends IDefaultComponentProps {
   verifyUserSession: any;
 }
 
-const App: React.FC<IAppComponentProps> = ({
+export const PagesRouting: React.FC = () => {
+  return (
+    <Switch>
+      <ErrorBoundary>
+        <Route exact path="/" component={HomePage} />
+        <Suspense fallback={SpinnerToDisplay}>
+          <Route path="/signin" component={SignInAndSignUp} />
+          <Route path="/shop" component={ShopPage} />
+          <Route path="/checkout" component={CheckoutPage} />
+        </Suspense>
+      </ErrorBoundary>
+      <Route component={NotFoundPage} />
+    </Switch>
+  );
+};
+
+export const AppComponent: React.FC<IAppComponentProps> = ({
   setSignOutUser,
   verifyUserSession
 }) => {
@@ -59,20 +75,7 @@ const App: React.FC<IAppComponentProps> = ({
   return (
     <div className="app-container">
       <Header onSignOut={setSignOutUser} />
-      <Switch>
-        <ErrorBoundary>
-          <Route exact path="/" component={HomePage} />
-
-          <Suspense fallback={SpinnerToDisplay}>
-            <Route path="/signin" component={SignInAndSignUp} />
-            <Route path="/shop" component={ShopPage} />
-            <Route path="/checkout" component={CheckoutPage} />
-          </Suspense>
-        </ErrorBoundary>
-
-        <Route component={NotFoundPage} />
-      </Switch>
-
+      <PagesRouting />>
       <ToastContainer
         className="toast-container"
         toastClassName="dark-toast"
@@ -105,4 +108,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 export default connect(
   null,
   mapDispatchToProps
-)(App);
+)(AppComponent);
